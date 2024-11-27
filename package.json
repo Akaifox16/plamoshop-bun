@@ -3,13 +3,23 @@
   "version": "1.0.50",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "bun run --watch src/index.ts"
+    "dev": "bun run --watch src/index.ts",
+    "db:migrate": "bun drizzle-kit push"
   },
   "dependencies": {
-    "elysia": "latest"
+    "@babia/uuid-v7": "npm:@jsr/babia__uuid-v7",
+    "@libsql/client": "^0.14.0",
+    "drizzle-orm": "^0.36.4",
+    "drizzle-typebox": "^0.1.1",
+    "elysia": "latest",
+    "zod": "^3.23.8"
   },
   "devDependencies": {
-    "bun-types": "latest"
+    "bun-types": "latest",
+    "drizzle-kit": "^0.28.1"
+  },
+  "override": {
+    "@sinclair/typebox": "0.32.34"
   },
   "module": "src/index.js"
 }
