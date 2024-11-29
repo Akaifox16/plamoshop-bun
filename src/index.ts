@@ -1,13 +1,14 @@
 import { Elysia } from "elysia";
 import { swagger } from '@elysiajs/swagger'
-import addressController from "./modules/address/address.controller";
+import { addressModule, customerModule } from "./modules";
 
 const app = new Elysia()
   .use(swagger())
   .group(
     '/api/v1', app =>
     app
-      .use(addressController)
+      .use(customerModule)
+      .use(addressModule)
   )
   .listen(3000);
 

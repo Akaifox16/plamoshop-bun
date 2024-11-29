@@ -5,7 +5,17 @@ import { dbScheme } from '../../database/model';
 const { address: addressSelect } = dbScheme.select
 const { address } = dbScheme.insert
 
-const addressController = new Elysia({ prefix: '/address' })
+const customerAddressDTO = t.Object({
+	addressLine1: address.addressLine1,
+	addressLine2: address.addressLine2,
+	addressNo: address.addressNo,
+	city: address.city,
+	state: address.state,
+	postalCode: address.postalCode,
+	country: address.country,
+})
+
+const addressController = new Elysia({ prefix: '/addresses' })
 	.decorate('address', new AddressRepository())
 	.onTransform(function log({ body, params, path, request: { method } }) {
 		console.log(`${method} ${path}`, {
@@ -26,18 +36,12 @@ const addressController = new Elysia({ prefix: '/address' })
 			tags: ['customer']
 		},
 	})
-	.post('/:cid', async ({ address, params: { cid }, body }) => {
-		return await address.create({ ...body, owner: cid })
+	.post('/:cid', async ({ address, params: { cid }, body, error }) => {
+		return address.create({ ...body, owner: cid })
+			.then(addr => addr.toJSON())
+			.catch(err => error(400, `${err}`))
 	}, {
-		body: t.Object({
-			addressLine1: address.addressLine1,
-			addressLine2: address.addressLine2,
-			addressNo: address.addressNo,
-			city: address.city,
-			state: address.state,
-			postalCode: address.postalCode,
-			country: address.country,
-		}),
+		body: customerAddressDTO,
 		detail: {
 			summary: 'Create address for customer',
 			tags: ['customer']
@@ -50,15 +54,7 @@ const addressController = new Elysia({ prefix: '/address' })
 			cid: addressSelect.owner,
 			aid: addressSelect.addressId
 		}),
-		body: t.Object({
-			addressLine1: address.addressLine1,
-			addressLine2: address.addressLine2,
-			addressNo: address.addressNo,
-			city: address.city,
-			state: address.state,
-			postalCode: address.postalCode,
-			country: address.country,
-		}),
+		body: t.Partial(customerAddressDTO),
 		detail: {
 			summary: 'Update address information for given address id',
 			tags: ['customer']

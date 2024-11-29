@@ -8,9 +8,9 @@ export const customers = table(
   "customers",
   {
     cid: t.text("customer_id").primaryKey(),
-    fname: t.text("customer_fname"),
-    lname: t.text("customer_lname"),
-    phone: t.text(),
+    fname: t.text("customer_fname").notNull(),
+    lname: t.text("customer_lname").notNull(),
+    phone: t.text().notNull(),
     ...timestamps,
   },
   (table) => {
