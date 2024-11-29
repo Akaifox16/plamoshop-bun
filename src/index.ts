@@ -1,7 +1,9 @@
 import { Elysia } from "elysia";
+import { swagger } from '@elysiajs/swagger'
 import addressController from "./modules/address/address.controller";
 
 const app = new Elysia()
+  .use(swagger())
   .group(
     '/api/v1', app =>
     app

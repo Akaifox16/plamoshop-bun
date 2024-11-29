@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "@babia/uuid-v7": "npm:@jsr/babia__uuid-v7",
+    "@elysiajs/swagger": "^1.1.6",
     "@libsql/client": "^0.14.0",
     "drizzle-orm": "^0.36.4",
     "drizzle-typebox": "^0.1.1",
