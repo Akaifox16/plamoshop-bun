@@ -1,26 +1,11 @@
-import Elysia, { t } from "elysia";
+import { Elysia } from "elysia";
 import { CustomerRepository } from "./customer.repository";
-import { dbScheme } from "../../database/model";
+import CustomerModel from "./customer.model";
 
-const {
-	select: { customers: customerSelect },
-	insert: { customers },
-} = dbScheme
-
-const customerDTO = t.Object({
-	fname: customers.fname,
-	lname: customers.lname,
-	phone: customers.phone,
-})
 
 const customerController = new Elysia({ prefix: '/customers' })
 	.decorate('customer', new CustomerRepository())
-	.onTransform(function log({ body, params, path, request: { method } }) {
-		console.log(`${method} ${path}`, {
-			body,
-			params
-		})
-	})
+	.use(CustomerModel)
 	.get('/', async ({ customer }) => {
 		return await customer.getAll()
 	}, {
@@ -32,16 +17,14 @@ const customerController = new Elysia({ prefix: '/customers' })
 	.post('/', async ({ customer, body }) => {
 		return await customer.create(body)
 	}, {
-		body: customerDTO,
+		body: 'customer.create',
 		detail: {
 			summary: 'Create new customer',
 			tags: ['customer']
 		}
 	})
 	.guard({
-		params: t.Object({
-			cid: customerSelect.cid,
-		})
+		params: 'customer.params.common'
 	})
 	.get('/:cid', async ({ customer, params: { cid } }) => {
 		return await customer.getById(cid)
@@ -54,7 +37,7 @@ const customerController = new Elysia({ prefix: '/customers' })
 	.patch('/:cid', async ({ customer, params: { cid }, body }) => {
 		return await customer.updateById(cid, body)
 	}, {
-		body: t.Partial(customerDTO),
+		body: 'customer.update',
 		detail: {
 			summary: 'Update customer information',
 			tags: ['customer'],

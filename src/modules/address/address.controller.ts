@@ -1,32 +1,12 @@
 import { Elysia, t } from 'elysia'
 import { AddressRepository } from './address.repository';
-import { dbScheme } from '../../database/model';
-
-const { address: addressSelect } = dbScheme.select
-const { address } = dbScheme.insert
-
-const customerAddressDTO = t.Object({
-	addressLine1: address.addressLine1,
-	addressLine2: address.addressLine2,
-	addressNo: address.addressNo,
-	city: address.city,
-	state: address.state,
-	postalCode: address.postalCode,
-	country: address.country,
-})
+import AddressModel from './address.model';
 
 const addressController = new Elysia({ prefix: '/addresses' })
 	.decorate('address', new AddressRepository())
-	.onTransform(function log({ body, params, path, request: { method } }) {
-		console.log(`${method} ${path}`, {
-			body,
-			params
-		})
-	})
+	.use(AddressModel)
 	.guard({
-		params: t.Object({
-			cid: addressSelect.owner,
-		})
+		params: 'address.params.default'
 	})
 	.get('/:cid', async ({ address, params: { cid }, error }) => {
 		return await address.getByOwner(cid) ?? error(404, 'Address Not Found')
@@ -36,12 +16,10 @@ const addressController = new Elysia({ prefix: '/addresses' })
 			tags: ['customer']
 		},
 	})
-	.post('/:cid', async ({ address, params: { cid }, body, error }) => {
-		return address.create({ ...body, owner: cid })
-			.then(addr => addr.toJSON())
-			.catch(err => error(400, `${err}`))
+	.post('/:cid', async ({ address, params: { cid }, body }) => {
+		return await address.create({ ...body, owner: cid })
 	}, {
-		body: customerAddressDTO,
+		body: 'address.create',
 		detail: {
 			summary: 'Create address for customer',
 			tags: ['customer']
@@ -50,11 +28,8 @@ const addressController = new Elysia({ prefix: '/addresses' })
 	.patch('/:cid/:aid', async ({ address, params: { aid }, body }) => {
 		return await address.updateById(aid, body)
 	}, {
-		params: t.Object({
-			cid: addressSelect.owner,
-			aid: addressSelect.addressId
-		}),
-		body: t.Partial(customerAddressDTO),
+		params: 'address.params.byId',
+		body: 'address.update',
 		detail: {
 			summary: 'Update address information for given address id',
 			tags: ['customer']
@@ -64,10 +39,7 @@ const addressController = new Elysia({ prefix: '/addresses' })
 		await address.deleteById(aid)
 		return { status: 'OK' }
 	}, {
-		params: t.Object({
-			cid: addressSelect.owner,
-			aid: addressSelect.addressId
-		}),
+		params: 'address.params.byId',
 		detail: {
 			summary: 'Delete a customer\'s address for given address id',
 			tags: ['customer']

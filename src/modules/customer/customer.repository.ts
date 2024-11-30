@@ -45,7 +45,7 @@ export class CustomerRepository {
 	}
 
 	async updateById(id: CustomerId, data: CustomerUpdateDTO) {
-		const updateDate = new Intl.DateTimeFormat('en-CA', {
+		const updateDate = new Intl.DateTimeFormat(env.TIME_LOCALE, {
 			year: 'numeric',
 			month: '2-digit',
 			day: '2-digit',
