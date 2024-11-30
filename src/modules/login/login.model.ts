@@ -15,7 +15,7 @@ const signupDTO = t.Object({
 	password: logins.password,
 	fname: employees.fname,
 	lname: employees.lname,
-	reportTo: employees.reportsTo,
+	reportsTo: employees.reportsTo,
 	email: employees.email,
 	ext: employees.ext,
 	officeCode: employees.officeCode,

@@ -12,6 +12,10 @@ const AuthService = new Elysia()
 			secrets: ['secure', 'secret', 'rotation'],
 		})
 	})
+	.model((model) => ({
+		...model,
+		optionalSession: t.Optional(model.session),
+	}))
 	.macro(({ onBeforeHandle }) => ({
 		isSignIn(enabled: boolean) {
 			if (!enabled) return

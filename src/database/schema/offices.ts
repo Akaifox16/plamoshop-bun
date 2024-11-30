@@ -8,6 +8,7 @@ export const offices = table(
   "offices",
   {
     officeCode: t.numeric().primaryKey(),
+    officeName: t.text(),
     ...timestamps,
   },
   (table) => {

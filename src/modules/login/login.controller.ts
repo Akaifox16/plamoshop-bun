@@ -9,7 +9,7 @@ const loginController = new Elysia()
 	.decorate('logins', new LoginRepository())
 	.use(LoginModel)
 	.use(AuthService)
-	.put('/signup', async ({ employees, logins, cookie: { token: tokenCookie }, jwt_access_token, body, error }) => {
+	.put('/signup', async ({ employees, logins, body, error }) => {
 		const existUser = await logins.getById(body.eid)
 
 		if (existUser) return error(400, "Username taken!!")
@@ -21,14 +21,10 @@ const loginController = new Elysia()
 
 		if (!newLoginRecord || !newUser) return error(400, 'Error occur when create user')
 
-		const token = await jwt_access_token.sign({ id: newUser.eid })
-		tokenCookie.value = token
-
-		return { success: true, message: "Signed up and Logged in" }
+		return { success: true, message: "User created" }
 	}, {
 		isSignIn: false,
 		body: 'auth.signup',
-		cookie: 'session',
 		detail: {
 			summary: "Signup new employee",
 			tags: ['login'],
@@ -48,7 +44,7 @@ const loginController = new Elysia()
 	}, {
 		isSignIn: false,
 		body: 'auth.login',
-		cookie: 'session',
+		cookie: 'optionalSession',
 		detail: {
 			summary: "Login with employee credential",
 			tags: ['login'],
