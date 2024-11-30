@@ -1,12 +1,17 @@
-import { Elysia, t } from 'elysia'
+import { Elysia } from 'elysia'
 import { AddressRepository } from './address.repository';
 import AddressModel from './address.model';
+import { jwtConfig } from '../login/jwt.config';
+import AuthService from '../login/auth.service';
 
 const addressController = new Elysia({ prefix: '/addresses' })
 	.decorate('address', new AddressRepository())
+	.use(jwtConfig)
 	.use(AddressModel)
+	.use(AuthService)
 	.guard({
-		params: 'address.params.default'
+		params: 'address.params.default',
+		isSignIn: true,
 	})
 	.get('/:cid', async ({ address, params: { cid }, error }) => {
 		return await address.getByOwner(cid) ?? error(404, 'Address Not Found')

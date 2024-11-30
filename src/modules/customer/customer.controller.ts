@@ -1,11 +1,13 @@
 import { Elysia } from "elysia";
 import { CustomerRepository } from "./customer.repository";
 import CustomerModel from "./customer.model";
+import { getEmployeeId } from "../login/auth.service";
 
 
 const customerController = new Elysia({ prefix: '/customers' })
 	.decorate('customer', new CustomerRepository())
 	.use(CustomerModel)
+	.use(getEmployeeId)
 	.get('/', async ({ customer }) => {
 		return await customer.getAll()
 	}, {
@@ -14,8 +16,11 @@ const customerController = new Elysia({ prefix: '/customers' })
 			tags: ['customer'],
 		}
 	})
-	.post('/', async ({ customer, body }) => {
-		return await customer.create(body)
+	.post('/', async ({ customer, eid, body }) => {
+		return await customer.create({
+			...body,
+			responder: eid,
+		})
 	}, {
 		body: 'customer.create',
 		detail: {

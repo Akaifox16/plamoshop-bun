@@ -9,9 +9,9 @@ const app = new Elysia()
   .group(
     '/api/v1', (app) =>
     app
+      .use(loginModule)
       .use(customerModule)
       .use(addressModule)
-      .use(loginModule)
   )
   .listen(3000);
 
