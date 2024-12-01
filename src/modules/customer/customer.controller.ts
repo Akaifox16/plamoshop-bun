@@ -4,7 +4,7 @@ import CustomerModel from "./customer.model";
 import { getEmployeeId } from "../login/auth.service";
 
 
-const customerController = new Elysia({ prefix: '/customers' })
+const customerController = new Elysia({ prefix: '/customers', tags: ['customer'] })
 	.decorate('customer', new CustomerRepository())
 	.use(CustomerModel)
 	.use(getEmployeeId)
@@ -13,7 +13,6 @@ const customerController = new Elysia({ prefix: '/customers' })
 	}, {
 		detail: {
 			summary: 'List all customers',
-			tags: ['customer'],
 		}
 	})
 	.post('/', async ({ customer, eid, body }) => {
@@ -25,7 +24,6 @@ const customerController = new Elysia({ prefix: '/customers' })
 		body: 'customer.create',
 		detail: {
 			summary: 'Create new customer',
-			tags: ['customer']
 		}
 	})
 	.guard({
@@ -36,7 +34,6 @@ const customerController = new Elysia({ prefix: '/customers' })
 	}, {
 		detail: {
 			summary: 'Get customer information by customer id',
-			tags: ['customer'],
 		}
 	})
 	.patch('/:cid', async ({ customer, params: { cid }, body }) => {
@@ -45,7 +42,6 @@ const customerController = new Elysia({ prefix: '/customers' })
 		body: 'customer.update',
 		detail: {
 			summary: 'Update customer information',
-			tags: ['customer'],
 		}
 	})
 

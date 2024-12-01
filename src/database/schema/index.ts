@@ -3,6 +3,8 @@ import { customers } from "./customer";
 import { employees } from "./employee";
 import { logins } from "./login";
 import { offices } from "./offices";
+import { products } from "./product";
+import { productLines } from "./productLine";
 
 export const table = {
   address,
@@ -10,6 +12,8 @@ export const table = {
   employees,
   logins,
   offices,
+  products,
+  productLines,
 } as const
 
 export type Table = typeof table
@@ -20,4 +24,6 @@ export {
   employees,
   logins,
   offices,
+  products,
+  productLines,
 }

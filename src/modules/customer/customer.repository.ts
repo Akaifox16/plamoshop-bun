@@ -2,7 +2,7 @@ import { eq } from "drizzle-orm";
 import { db } from "../../database/connection";
 import { customers } from "../../database/schema";
 import { randomUUIDv7 } from "bun";
-import { env } from "../../config/env";
+import { getCurrentTimestamp } from "../../utils/timestamp";
 
 type CustomerCreateDTO = Omit<typeof customers.$inferInsert, 'cid'>
 type CustomerUpdateDTO = Partial<CustomerCreateDTO>
@@ -45,23 +45,11 @@ export class CustomerRepository {
 	}
 
 	async updateById(id: CustomerId, data: CustomerUpdateDTO) {
-		const updateDate = new Intl.DateTimeFormat(env.TIME_LOCALE, {
-			year: 'numeric',
-			month: '2-digit',
-			day: '2-digit',
-			hour: '2-digit',
-			minute: '2-digit',
-			second: '2-digit',
-			hour12: false,
-		})
-			.format(Date.now())
-			.replace(',', '')
-
 		const updatedCustomer = await db
 			.update(customers)
 			.set({
 				...data,
-				updatedAt: updateDate,
+				updatedAt: getCurrentTimestamp(),
 			})
 			.where(eq(customers.cid, id))
 			.returning(returnCustomer)

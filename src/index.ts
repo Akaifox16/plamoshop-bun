@@ -1,6 +1,6 @@
 import { Elysia } from "elysia";
 import { swagger } from '@elysiajs/swagger'
-import { addressModule, customerModule, loginModule } from "./modules";
+import { addressModule, customerModule, loginModule, productModule } from "./modules";
 import { Logestic } from "logestic";
 
 const app = new Elysia()
@@ -12,6 +12,7 @@ const app = new Elysia()
       .use(loginModule)
       .use(customerModule)
       .use(addressModule)
+      .use(productModule)
   )
   .listen(3000);
 

@@ -2,6 +2,7 @@ import { eq } from "drizzle-orm";
 import { db } from "../../database/connection";
 import { env } from "../../config/env";
 import { logins } from "../../database/schema";
+import { getCurrentTimestamp } from "../../utils/timestamp";
 
 type LoginCreateDTO = typeof logins.$inferInsert
 type LoginUpdateDTO = Pick<LoginCreateDTO, 'password'>
@@ -38,23 +39,12 @@ export class LoginRepository {
 	}
 
 	async updateById(id: EmployeeId, data: LoginUpdateDTO) {
-		const updateDate = new Intl.DateTimeFormat(env.TIME_LOCALE, {
-			year: 'numeric',
-			month: '2-digit',
-			day: '2-digit',
-			hour: '2-digit',
-			minute: '2-digit',
-			second: '2-digit',
-			hour12: false,
-		})
-			.format(Date.now())
-			.replace(',', '')
 
 		const updateCreds = await db
 			.update(logins)
 			.set({
 				...data,
-				updatedAt: updateDate,
+				updatedAt: getCurrentTimestamp(),
 			})
 			.where(eq(logins.eid, id))
 			.returning(returnCredential)

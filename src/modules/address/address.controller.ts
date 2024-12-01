@@ -4,7 +4,7 @@ import AddressModel from './address.model';
 import { jwtConfig } from '../login/jwt.config';
 import AuthService from '../login/auth.service';
 
-const addressController = new Elysia({ prefix: '/addresses' })
+const addressController = new Elysia({ prefix: '/addresses', tags: ['customer', 'address'] })
 	.decorate('address', new AddressRepository())
 	.use(jwtConfig)
 	.use(AddressModel)
@@ -18,7 +18,6 @@ const addressController = new Elysia({ prefix: '/addresses' })
 	}, {
 		detail: {
 			summary: 'Get list of addresses of the customer',
-			tags: ['customer']
 		},
 	})
 	.post('/:cid', async ({ address, params: { cid }, body }) => {
@@ -27,7 +26,6 @@ const addressController = new Elysia({ prefix: '/addresses' })
 		body: 'address.create',
 		detail: {
 			summary: 'Create address for customer',
-			tags: ['customer']
 		},
 	})
 	.patch('/:cid/:aid', async ({ address, params: { aid }, body }) => {
@@ -37,7 +35,6 @@ const addressController = new Elysia({ prefix: '/addresses' })
 		body: 'address.update',
 		detail: {
 			summary: 'Update address information for given address id',
-			tags: ['customer']
 		},
 	})
 	.delete(':cid/:aid', async ({ address, params: { aid } }) => {
@@ -47,7 +44,6 @@ const addressController = new Elysia({ prefix: '/addresses' })
 		params: 'address.params.byId',
 		detail: {
 			summary: 'Delete a customer\'s address for given address id',
-			tags: ['customer']
 		},
 	})
 

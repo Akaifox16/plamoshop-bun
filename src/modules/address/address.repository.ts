@@ -2,7 +2,7 @@ import { eq as equal } from "drizzle-orm"
 import { db } from "../../database/connection"
 import { address } from "../../database/schema"
 import { randomUUIDv7 } from "bun"
-import { env } from "../../config/env"
+import { getCurrentTimestamp } from "../../utils/timestamp"
 
 type AddressCreateDTO = Omit<typeof address.$inferInsert, 'addressId'>
 type AddressUpdateDTO = Partial<Omit<AddressCreateDTO, 'owner'>>
@@ -49,23 +49,11 @@ export class AddressRepository {
 	}
 
 	async updateById(id: AddressId, addressDto: AddressUpdateDTO) {
-		const updateDate = new Intl.DateTimeFormat(env.TIME_LOCALE, {
-			year: 'numeric',
-			month: '2-digit',
-			day: '2-digit',
-			hour: '2-digit',
-			minute: '2-digit',
-			second: '2-digit',
-			hour12: false,
-		})
-			.format(Date.now())
-			.replace(',', '')
-
 		const updateAddress = await db
 			.update(address)
 			.set({
 				...addressDto,
-				updatedAt: updateDate,
+				updatedAt: getCurrentTimestamp(),
 			})
 			.where(equal(address.addressId, id))
 			.returning(returnAddress)

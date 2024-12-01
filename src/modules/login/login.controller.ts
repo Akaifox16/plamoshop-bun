@@ -4,7 +4,7 @@ import { LoginRepository } from "./login.repository";
 import LoginModel from "./login.model";
 import AuthService, { getEmployeeId } from "./auth.service";
 
-const loginController = new Elysia()
+const loginController = new Elysia({ tags: ['auth'] })
 	.decorate('employees', new EmployeeRepository())
 	.decorate('logins', new LoginRepository())
 	.use(LoginModel)
@@ -27,7 +27,6 @@ const loginController = new Elysia()
 		body: 'auth.signup',
 		detail: {
 			summary: "Signup new employee",
-			tags: ['login'],
 		},
 	})
 	.post('/signin', async ({ logins, cookie: { token: tokenCookie }, jwt_access_token, body, error }) => {
@@ -47,7 +46,6 @@ const loginController = new Elysia()
 		cookie: 'optionalSession',
 		detail: {
 			summary: "Login with employee credential",
-			tags: ['login'],
 		},
 	})
 	.use(getEmployeeId)
@@ -58,7 +56,6 @@ const loginController = new Elysia()
 	}, {
 		detail: {
 			summary: "Sign out",
-			tags: ['login'],
 		}
 	})
 	.get('/me', async ({ employees, eid }) => {
@@ -66,8 +63,6 @@ const loginController = new Elysia()
 	}, {
 		detail: {
 			summary: "Get user information of current user",
-			tags: ['login'],
-
 		}
 	})
 

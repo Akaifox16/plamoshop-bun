@@ -1,7 +1,7 @@
 import { eq } from "drizzle-orm";
 import { db } from "../../database/connection";
-import { env } from "../../config/env";
 import { employees } from "../../database/schema/employee";
+import { getCurrentTimestamp } from "../../utils/timestamp";
 
 type EmployeeCreateDTO = typeof employees.$inferInsert
 type EmployeeUpdateDTO = Partial<EmployeeCreateDTO>
@@ -43,23 +43,11 @@ export class EmployeeRepository {
   }
 
   async updateById(id: EmployeeId, data: EmployeeUpdateDTO) {
-    const updateDate = new Intl.DateTimeFormat(env.TIME_LOCALE, {
-      year: 'numeric',
-      month: '2-digit',
-      day: '2-digit',
-      hour: '2-digit',
-      minute: '2-digit',
-      second: '2-digit',
-      hour12: false,
-    })
-      .format(Date.now())
-      .replace(',', '')
-
     const updatedEmployee = await db
       .update(employees)
       .set({
         ...data,
-        updatedAt: updateDate,
+        updatedAt: getCurrentTimestamp(),
       })
       .where(eq(employees.eid, id))
       .returning(returnEmployee)
