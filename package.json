@@ -1,28 +1,20 @@
 {
-  "name": "plamo-mng",
-  "version": "1.0.50",
+  "name": "plamoshop-monorepo",
+  "version": "0.0.0",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "bun run --watch src/index.ts",
-    "db:migrate": "bun drizzle-kit push"
+    "build": "turbo run build",
+    "dev": "turbo run dev"
   },
-  "dependencies": {
-    "@babia/uuid-v7": "npm:@jsr/babia__uuid-v7",
-    "@elysiajs/jwt": "^1.1.1",
-    "@elysiajs/swagger": "^1.1.6",
-    "@libsql/client": "^0.14.0",
-    "drizzle-orm": "^0.36.4",
-    "drizzle-typebox": "^0.1.1",
-    "elysia": "latest",
-    "logestic": "^1.2.4",
-    "zod": "^3.23.8"
+  "engines": {
+    "node": ">=20"
   },
+  "packageManager": "bun@1.1.37",
   "devDependencies": {
-    "bun-types": "latest",
-    "drizzle-kit": "^0.28.1"
-  },
-  "override": {
-    "@sinclair/typebox": "0.32.34"
-  },
-  "module": "src/index.js"
+    "turbo": "^2.3.3"
+  }
 }
