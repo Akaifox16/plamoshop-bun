@@ -11,10 +11,13 @@ type ProductId = typeof products.$inferSelect.productId
 
 const returnProduct = {
 	productId: products.productId,
-	productVendor: products.productVendor,
+	productName: products.productName,
+	productScale: products.productScale,
 	productLine: products.productLine,
-	stockQuantity: products.stockQuantity,
+	productVendor: products.productVendor,
 	price: products.price,
+	buyPrice: products.buyPrice,
+	stockQuantity: products.stockQuantity,
 }
 
 export class ProductRepository {

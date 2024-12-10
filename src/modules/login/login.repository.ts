@@ -1,6 +1,5 @@
 import { eq } from "drizzle-orm";
 import { db } from "../../database/connection";
-import { env } from "../../config/env";
 import { logins } from "../../database/schema";
 import { getCurrentTimestamp } from "../../utils/timestamp";
 

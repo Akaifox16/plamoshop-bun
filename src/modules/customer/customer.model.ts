@@ -8,7 +8,6 @@ const {
 
 const customerDTO = t.Object({
 	fname: customers.fname,
-	responder: customers.responder,
 	lname: customers.lname,
 	phone: customers.phone,
 })
