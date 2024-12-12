@@ -14,7 +14,7 @@ const app = new Elysia()
       .use(addressModule)
       .use(productModule)
   )
-  .listen(3000);
+  .listen(8000);
 
 export type App = typeof app
 
